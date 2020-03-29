@@ -194,14 +194,19 @@ void loop() {
       {
         stringAcces = stringAcces + '0';
       }
-      stringAcces = stringAcces + String(x / 100);
+
+      float f = x / 100;
+
+      if (x == 0)
+        stringAcces = stringAcces + "0.0";
+      else
+        stringAcces = stringAcces + String(f, 2);
+
       stringAcces = stringAcces + '/';
 
-      if ((x - (x / 100) * 100) < 10)
-      {
-        stringAcces = stringAcces + '0';
-      }
-      stringAcces = stringAcces + String((x - (x / 100) * 100)) + ".dat";
+      Serial.println(String(f, 2));
+
+      stringAcces = stringAcces  + "0.dat";
       char charAcces[stringAcces.length() + 1];
       stringAcces.toCharArray(charAcces, stringAcces.length() + 1);
       File dataFile = SD.open(charAcces);
@@ -376,7 +381,7 @@ void mode() {
       String binNumber = String(num, BIN);
       /* get the length of the string */
       int binLength = binNumber.length();
-      if (num <= 64) { 
+      if (num <= 64) {
         for (int i = 0, x = 1; i < binLength; i++, x += 2) {
           if (binNumber[i] == '0') leds[i + binLength - x] = CRGB(0, 0, 0);
           if (binNumber[i] == '1') leds[i + binLength - x] = CRGB(255, 0, 0);
@@ -399,8 +404,8 @@ void mode() {
       String binNumber = String(num, BIN);
       /* get the length of the string */
       int binLength = binNumber.length();
-      if (num <= 64) { 
-        
+      if (num <= 64) {
+
         FastLED.clear();
         FastLED.show();
         for (int i = 0, x = 1; i < binLength; i++, x += 2) {
@@ -424,10 +429,12 @@ void mode() {
     ; // wait for serial port to connect. Needed for Leonardo only
     float myIntensity = 255 * float(analogRead(potentionmetrePin)) / 1023;
     //     float myIntensity = 5;
-    cli();    
-     
-   for(int i=0; i<1; i++)
-    {sendPixel( 0 , myIntensity , 0 );} 
+    cli();
+
+    for (int i = 0; i < 1; i++)
+    {
+      sendPixel( 0 , myIntensity , 0 );
+    }
 
     sei();
     show();
